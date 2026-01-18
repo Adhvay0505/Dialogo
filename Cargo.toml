@@ -1,0 +1,72 @@
+[package]
+name = "xmpp-client"
+version = "0.1.0"
+edition = "2021"
+authors = ["Your Name <your.email@example.com>"]
+description = "A modern, full-featured XMPP client built with Rust and GTK"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/yourusername/xmpp-client"
+keywords = ["xmpp", "chat", "gtk", "messaging", "im"]
+categories = ["gui", "network-programming"]
+
+[features]
+default = ["gtk4"]
+gtk4 = ["dep:gtk4", "dep:libadwaita"]
+gtk3 = ["dep:gtk"]
+
+[dependencies]
+# Core dependencies
+tokio = { version = "1.40", features = ["rt-multi-thread", "macros"] }
+anyhow = { version = "1.0", features = ["std"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt"] }
+uuid = { version = "1.11", features = ["v4", "serde"] }
+
+# GTK4 dependencies (default)
+gtk4 = { version = "0.9", optional = true }
+libadwaita = { version = "0.6", optional = true }
+
+# GTK3 fallback dependencies
+gtk = { version = "0.18", optional = true }
+
+# XMPP Protocol - try multiple options
+xmpp = { version = "0.6", optional = true }
+tokio-xmpp = { version = "4.0", optional = true }
+
+# Data storage (optional for basic version)
+sqlx = { version = "0.8", features = ["runtime-tokio-rustls", "sqlite", "chrono", "uuid"], optional = true }
+chrono = { version = "0.4", features = ["serde"], optional = true }
+dirs = "5.0"
+
+# File transfer (optional)
+bytes = { version = "1.7", optional = true }
+mime_guess = { version = "2.0", optional = true }
+
+# Security (optional)
+ring = { version = "0.17", optional = true }
+base64 = { version = "0.22", optional = true }
+
+# Configuration (optional)
+toml = "0.8", optional = true }
+config = "0.14", optional = true }
+
+[dev-dependencies]
+tempfile = "3.0"
+tokio-test = "0.4"
+
+[[bin]]
+name = "xmpp-client"
+path = "src/main.rs"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
+
+[profile.dev]
+opt-level = 0
+debug = true
